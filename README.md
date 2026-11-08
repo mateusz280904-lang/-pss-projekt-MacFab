@@ -13,7 +13,7 @@ w�asne REST API, kt�re zesp� projektuje, testuje i prezentuje.
 
 ## Pomys�y na temat projektu (wyb�r w LAB 08)
 
-- do ustalenia
+- system rezerwacji sal na uczelni (LOGIN_C)
 
 ## Jak pracujemy
 
