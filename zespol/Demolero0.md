@@ -1,0 +1,5 @@
+- **Rola w zespole:** C
+- **System operacyjny:** Windows 11
+- **Wersja Gita (`git --version`):** TWOJA_WERSJA
+- **W projekcie chętnie zajmę się:** testami API w Postmanie
+- **Czego chcę się nauczyć:** projektowania REST API
