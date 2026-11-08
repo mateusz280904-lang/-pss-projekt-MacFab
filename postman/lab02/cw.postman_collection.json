@@ -1,0 +1,166 @@
+{
+  "info": {
+    "name": "pss-lab02-moje-testy",
+    "description": null,
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "NBP — 3 ostatnie kursy",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "description": "",
+            "disabled": false,
+            "type": "default"
+          },
+          {
+            "key": "Connection",
+            "value": "close",
+            "description": "",
+            "disabled": false,
+            "type": "default"
+          }
+        ],
+        "description": "",
+        "url": {
+          "raw": "{{nbp_url}}/exchangerates/rates/a/{{currency_code}}/last/3/",
+          "protocol": "",
+          "host": [
+            "{{nbp_url}}"
+          ],
+          "path": [
+            "exchangerates",
+            "rates",
+            "a",
+            "{{currency_code}}",
+            "last",
+            "3",
+            ""
+          ],
+          "query": [],
+          "variable": []
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              "// Tests",
+              "const json = pm.response.json();",
+              "",
+              "pm.test(\"Odpowiedź ma wymagane pola code i rates\", function() {",
+              "  pm.expect(json).to.have.property(\"code\");",
+              "  pm.expect(json).to.have.property(\"rates\");",
+              "});",
+              "",
+              "pm.test(\"Kod waluty ma format trzech wielkich liter\", function() {",
+              "  pm.expect(json.code).to.match(/^[A-Z]{3}$/);",
+              "});",
+              "",
+              "pm.test(\"Tablica rates zawiera dokładnie 3 elementy\", function() {",
+              "  pm.expect(json.rates).to.be.an(\"array\");",
+              "  pm.expect(json.rates).to.have.lengthOf(3);",
+              "});",
+              "",
+              "pm.test(\"Każdy kurs ma prawidłową datę i dodatni kurs\", function() {",
+              "  json.rates.forEach(function(rate) {",
+              "    pm.expect(rate).to.have.property(\"effectiveDate\");",
+              "    pm.expect(rate).to.have.property(\"mid\");",
+              "    pm.expect(rate.effectiveDate).to.match(/^\\d{4}-\\d{2}-\\d{2}$/);",
+              "    pm.expect(rate.mid).to.be.a(\"number\").and.above(0);",
+              "  });",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "NBP — za dużo notowań (400)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "description": "",
+            "disabled": false,
+            "type": "default"
+          },
+          {
+            "key": "Connection",
+            "value": "close",
+            "description": "",
+            "disabled": false,
+            "type": "default"
+          }
+        ],
+        "description": "",
+        "url": {
+          "raw": "{{nbp_url}}/exchangerates/rates/a/{{currency_code}}/last/256/",
+          "protocol": "",
+          "host": [
+            "{{nbp_url}}"
+          ],
+          "path": [
+            "exchangerates",
+            "rates",
+            "a",
+            "{{currency_code}}",
+            "last",
+            "256",
+            ""
+          ],
+          "query": [],
+          "variable": []
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              "// Tests",
+              "const body = pm.response.json();",
+              "",
+              "pm.test(\"Status odpowiedzi to 400\", function() {",
+              "  pm.expect(pm.response.code).to.equal(400);",
+              "});",
+              "",
+              "pm.test(\"Content-Type zawiera text/plain\", function() {",
+              "  pm.expect(pm.response.headers.get(\"content-type\")).to.include(\"text/plain\");",
+              "});",
+              "",
+              "pm.test(\"Komunikat zawiera limit 255\", function() {",
+              "  pm.expect(body.toString()).to.include(\"255\");",
+              "});"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "nbp_url",
+      "value": "https://api.nbp.pl/api",
+      "type": "default"
+    },
+    {
+      "key": "currency_code",
+      "value": "",
+      "type": "default"
+    }
+  ]
+}
