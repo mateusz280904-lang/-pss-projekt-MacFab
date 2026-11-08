@@ -1,0 +1,7 @@
+# Koñce linii: Git na Windows (core.autocrlf=true) zamieni³by LF na CRLF.
+# Pliki danych Postmana (CSV) i skrypty pow³oki zostawiamy zawsze z LF.
+*.csv  text eol=lf
+*.sh   text eol=lf
+*.json text eol=lf
+*.yml  text eol=lf
+*.yaml text eol=lf
